@@ -52,33 +52,33 @@ const devWebpackConfig = merge(baseWebpackConfig, {
     new webpack.NamedModulesPlugin(), // HMR shows correct file names in console on update.
     new webpack.NoEmitOnErrorsPlugin(),
     // https://github.com/ampedandwired/html-webpack-plugin
-    new HtmlWebpackPlugin({
-      filename: 'index.html',
-      template: 'index.html',
-      inject: true,
-      chunks: ['app']
-    }),
-    new HtmlWebpackPlugin({
-      filename: 'one.html',
-      template: 'pages/one/list.html',
-      inject: true,
-      chunks: ['one']
-    }),
-    new HtmlWebpackPlugin({
-      filename: 'two.html',
-      template: 'pages/two/list.html',
-      inject: true,
-      chunks: ['two']
-    }),
-    // copy custom static assets
-    new CopyWebpackPlugin([
-      {
-        from: path.resolve(__dirname, '../static'),
-        to: config.dev.assetsSubDirectory,
-        ignore: ['.*']
-      }
-    ])
-  ]
+    // new HtmlWebpackPlugin({
+    //   filename: 'index.html',
+    //   template: 'index.html',
+    //   inject: true,
+    //   chunks: ['app']
+    // }),
+    // new HtmlWebpackPlugin({
+    //   filename: 'one.html',
+    //   template: 'template/one/one.html',
+    //   inject: true,
+    //   chunks: ['one']
+    // }),
+    // new HtmlWebpackPlugin({
+    //   filename: 'two.html',
+    //   template: 'template/two/one.html',
+    //   inject: true,
+    //   chunks: ['two']
+    // }),
+    // // copy custom static assets
+    // new CopyWebpackPlugin([
+    //   {
+    //     from: path.resolve(__dirname, '../static'),
+    //     to: config.dev.assetsSubDirectory,
+    //     ignore: ['.*']
+    //   }
+    // ])
+  ].concat(utils.htmlPlugin())
 })
 
 module.exports = new Promise((resolve, reject) => {

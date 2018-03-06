@@ -99,3 +99,47 @@ exports.createNotifierCallback = () => {
     })
   }
 }
+
+var glob = require('glob');
+var HtmlWebpackPlugin = require('html-webpack-plugin');
+var PAGE_PATH = path.resolve(__dirname,'../src');
+var merge = require('webpack-merge');
+
+
+exports.entries = function(){
+  var entryFiles = glob.sync(PAGE_PATH+'/js/*.js');
+  var map = {};
+  entryFiles.forEach((filePath)=>{
+    var filename = filePath.substring(filePath.lastIndexOf('\/')+1,filePath.lastIndexOf('.'))
+    map[filename]=filePath;
+  })
+  return map;
+}
+
+exports.htmlPlugin = function(){
+  let entryHtml = glob.sync(PAGE_PATH+'/template/*/*.html');
+  let arr = [];
+  entryHtml.forEach((filePath) => {
+    let filename = filePath.substring(filePath.lastIndexOf('\/')+1,filePath.lastIndexOf('.'))
+    let conf = {
+      template:filePath,
+      filename:filename+'.html',
+      chunks:['manifest','vender',filename],
+      inject:true
+    }
+    if (process.env.NODE_ENV === 'production') {
+      conf = merge(conf, {
+        minify: {
+          removeComments: true,
+          collapseWhitespace: true,
+          removeAttributeQuotes: true
+        },
+        chunksSortMode: 'dependency'
+      })
+    }
+    arr.push(new HtmlWebpackPlugin(conf))
+  })
+  return arr;
+}
+
+
